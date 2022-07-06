@@ -205,6 +205,18 @@ func (d *UnaryService) InvokeWithArgs(ctx context.Context, methodName string, ar
 	return res, res.Error()
 }
 
+func (d *UnaryService) GetServiceMethods() []string {
+	methods := make([]string, 0)
+	d.reqTypeMap.Range(func(key, _ interface{}) bool {
+		s, _ := key.(string)
+		methods = append(methods, s)
+
+		return true
+	})
+
+	return methods
+}
+
 // openServer open a dubbo3 server, if there is already a service using the same protocol, it returns directly.
 func (dp *DubboProtocol) openServer(url *common.URL, tripleCodecType tripleConstant.CodecType) {
 	dp.serverLock.Lock()
